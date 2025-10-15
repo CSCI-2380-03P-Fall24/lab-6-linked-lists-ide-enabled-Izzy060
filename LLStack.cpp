@@ -6,7 +6,8 @@
 	// so be sure that the "next" Node is linked to a nullptr
 Node::Node(string s) 
 {
-
+	data = s;
+	next = nullptr;
 }
 
 //constructor : initiazlize the head and tail field from LLStack class 
@@ -14,7 +15,8 @@ Node::Node(string s)
 	// the head and tail should both be initialized as null pointers
 LLStack::LLStack()
 {
-
+	head = nullptr;
+	tail = nullptr;
 }
 
 /*
@@ -24,7 +26,10 @@ LLStack::LLStack()
 */
 string LLStack::top()
 {
-	return "fixthis";
+	if(size() == 0){
+		return "There is currently no data in the stack.\n";
+	}
+	return head.data;
 }
 
 /*
@@ -32,7 +37,7 @@ string LLStack::top()
 */
 int LLStack::size()
 {
-	return -1;
+	return count;
 }
 
 /*
@@ -45,7 +50,17 @@ int LLStack::size()
 */
 void LLStack::push(string s)
 {
-
+	Node* newNode = new Node(s);
+	
+	if(head == nulltpr){
+		head = newNode;
+		tail = newNode;
+	} else {
+		newNode->next = head;
+		head = newNode;
+	}
+	count++;
+	return;
 }
 
 /*
@@ -57,6 +72,22 @@ void LLStack::push(string s)
 */
 void LLStack::pop()
 {
+	if(head == nullptr){
+		cout << "Stack underflow error. There is no items in the stack.\n";
+		return;
+	}
+	if(size() > 1){
+		Node* temp = head;
+		head = head->next;
+		delete temp;
+		count--;
+	} else if(size() == 1){
+		Node* temp = head;
+		head = nullptr;
+		tail = nullptr;
+		delete temp;
+		count--;
+	}
 
 }
 
@@ -82,6 +113,43 @@ void LLStack::pop()
 */
 int LLStack::removeAll(const string& target) 
 {
-	return -1;
+    Node* current = head;
+    Node* previous = nullptr;
+    int removedNodes = 0;
+
+    while (current != nullptr) {
+        Node* nextNode = current->next;
+
+        if (current->data == target) {
+           
+            if (current == head) {
+                head = nextNode;
+            } else {
+                previous->next = nextNode;
+            }
+
+            
+            if (current == tail) {
+                tail = previous;
+            }
+
+            delete current;
+            removedNodes++;
+            count--;
+            
+        } else {
+            
+            previous = current;
+        }
+
+        current = nextNode;
+    }
+
+    
+    if (head == nullptr) {
+        tail = nullptr;
+    }
+
+    return removedNodes;
 }
 
